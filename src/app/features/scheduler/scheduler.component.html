@@ -1,1 +1,5 @@
-<ejs-schedule />
+<ejs-schedule [currentView]="currentView" [firstDayOfWeek]='1' [minDate]="minDate" [eventSettings]="eventSettings">
+  <e-views>
+    <e-view option="Month" [showWeekend]="true"></e-view>
+  </e-views>
+</ejs-schedule>
