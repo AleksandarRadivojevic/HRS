@@ -1,4 +1,11 @@
-<ejs-schedule [currentView]="currentView" [firstDayOfWeek]='1' [minDate]="minDate" [eventSettings]="eventSettings">
+<ejs-schedule
+  #scheduleObj
+  [minDate]="minDate"
+  [firstDayOfWeek]="1"
+  [currentView]="currentView"
+  [eventSettings]="eventSettings"
+  (cellClick)="onCellClick($event)"
+>
   <e-views>
     <e-view option="Month" [showWeekend]="true"></e-view>
   </e-views>

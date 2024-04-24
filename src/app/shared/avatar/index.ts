@@ -1,4 +1,4 @@
 export { AvatarComponent } from './avatar.component';
-export { AvatarData } from './avatar.interface';
-export { AvatarSize } from './avatar.interface';
-export { AvatarType } from './avatar.interface';
+export { AvatarData } from './interfaces/avatar.interface';
+export { AvatarSize } from './interfaces/avatar.interface';
+export { AvatarType } from './interfaces/avatar.interface';

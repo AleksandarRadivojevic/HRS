@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { AvatarData } from './avatar.interface';
+import { AvatarData } from './interfaces/avatar.interface';
 
 @Component({
   selector: 'app-avatar',
@@ -13,12 +13,14 @@ import { AvatarData } from './avatar.interface';
 export class AvatarComponent {
   @Input({ required: true }) public set data(value: AvatarData) {
     if (!value.src) {
-      this.nameInitials = value.name.split(" ").map((n)=>n[0]).join("");
+      this.nameInitials = value.name
+        .split(' ')
+        .map((n: string) => n[0])
+        .join('');
     }
     this.avatar = value;
   }
 
   public avatar!: AvatarData;
   public nameInitials: string = '';
-
 }
