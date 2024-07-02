@@ -14,11 +14,12 @@ import {
 } from '@syncfusion/ej2-angular-schedule';
 import { Reservation } from './interfaces/reservation.interface';
 import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
+import { ReservationComponent } from './reservation/reservation.component';
 
 @Component({
   selector: 'app-scheduler',
   standalone: true,
-  imports: [ScheduleModule, DialogModule],
+  imports: [ScheduleModule, DialogModule, ReservationComponent],
   providers: [
     DayService,
     WeekService,
@@ -32,7 +33,7 @@ import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
 })
 export class SchedulerComponent {
   public currentView: View = 'Month';
-  public minDate = new Date();
+  public minDate = new Date().setDate(new Date().getDate() - 1);
 
   @ViewChild('scheduleObj', { static: false })
   public scheduleObj!: ScheduleComponent;
@@ -49,7 +50,8 @@ export class SchedulerComponent {
     }
   }
 
-  public saveEvent(): void {
+  public saveEvent(data: Reservation | null): void {
+    console.log(data)
     // Tvoj kod za čuvanje događaja ide ovde
     if (this.dialog) {
       this.dialog.hide();

@@ -1,18 +1,26 @@
-<ejs-schedule #scheduleObj [minDate]="minDate" [firstDayOfWeek]="1" [currentView]="currentView"
-  [eventSettings]="eventSettings" (popupOpen)="onPopupOpen($event)">
+<ejs-schedule
+  #scheduleObj
+  [minDate]="minDate"
+  [firstDayOfWeek]="1"
+  [currentView]="currentView"
+  [eventSettings]="eventSettings"
+  (popupOpen)="onPopupOpen($event)"
+>
   <e-views>
     <e-view option="Month" [showWeekend]="true"></e-view>
   </e-views>
 </ejs-schedule>
 
-<ejs-dialog #dialog [visible]="false" header="Schedule Event" width="250px" [isModal]="true" [closeOnEscape]="true"
-  [showCloseIcon]='true'>
+<ejs-dialog
+  #dialog
+  width="50%"
+  [isModal]="true"
+  [visible]="false"
+  header="Book a House"
+  [closeOnEscape]="true"
+  [showCloseIcon]="true"
+>
   <ng-template #content>
-    <!-- Tvoj sadržaj za modal ide ovde -->
-    <div>
-      ovo je dialog
-    </div>
-    <input type="text" placeholder="Event Name" />
-    <button (click)="saveEvent()">Save</button>
+    <app-reservation (onCloseDialog)="saveEvent($event)"></app-reservation>
   </ng-template>
 </ejs-dialog>

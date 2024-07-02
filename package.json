@@ -18,6 +18,8 @@
     "@angular/platform-browser": "^18.0.5",
     "@angular/platform-browser-dynamic": "^18.0.5",
     "@angular/router": "^18.0.5",
+    "@syncfusion/ej2-angular-calendars": "^26.1.40",
+    "@syncfusion/ej2-angular-inputs": "^26.1.40",
     "@syncfusion/ej2-angular-layouts": "^25.1.37",
     "@syncfusion/ej2-angular-navigations": "^25.1.41",
     "@syncfusion/ej2-angular-popups": "^26.1.38",
