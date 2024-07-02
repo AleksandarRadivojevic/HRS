@@ -10,13 +10,15 @@ import {
   EventSettingsModel,
   CellClickEventArgs,
   ScheduleComponent,
+  PopupOpenEventArgs,
 } from '@syncfusion/ej2-angular-schedule';
 import { Reservation } from './interfaces/reservation.interface';
+import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
 
 @Component({
   selector: 'app-scheduler',
   standalone: true,
-  imports: [ScheduleModule],
+  imports: [ScheduleModule, DialogModule],
   providers: [
     DayService,
     WeekService,
@@ -31,8 +33,28 @@ import { Reservation } from './interfaces/reservation.interface';
 export class SchedulerComponent {
   public currentView: View = 'Month';
   public minDate = new Date();
-  @ViewChild('scheduleObj')
-  public scheduleObj?: ScheduleComponent;
+
+  @ViewChild('scheduleObj', { static: false })
+  public scheduleObj!: ScheduleComponent;
+
+  @ViewChild('dialog', { static: false })
+  public dialog!: DialogComponent;
+
+  public onPopupOpen(args: PopupOpenEventArgs): void {
+    if (args.type === 'QuickInfo') {
+      args.cancel = true;
+      if (this.dialog) {
+        this.dialog.show();
+      }
+    }
+  }
+
+  public saveEvent(): void {
+    // Tvoj kod za čuvanje događaja ide ovde
+    if (this.dialog) {
+      this.dialog.hide();
+    }
+  }
 
   // public data: object[] = [
   //   {
@@ -67,9 +89,9 @@ export class SchedulerComponent {
   };
 
   public onCellClick(args: CellClickEventArgs): void {
-    this.scheduleObj?.openEditor(args, 'Add');
-    setTimeout(() => {
-      this.scheduleObj?.closeQuickInfoPopup();
-    });
+    // this.scheduleObj?.openEditor(args, 'Add');
+    // setTimeout(() => {
+    //   this.scheduleObj?.closeQuickInfoPopup();
+    // });
   }
 }
