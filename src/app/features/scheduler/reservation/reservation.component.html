@@ -1,15 +1,18 @@
-<div class="container">
-  <input class="e-input" type="text" placeholder="Enter Name" />
+<div>
+  <ejs-textbox placeholder="Enter Name" floatLabelType="Auto" />
+
   <ejs-daterangepicker
     [firstDayOfWeek]="1"
     [allowEdit]="false"
+    floatLabelType="Auto"
     [fullScreenMode]="isMobileView"
     placeholder="Select dates to book a house"
-  ></ejs-daterangepicker>
+  />
+
   <ejs-textarea
     [rows]="5"
-    [cssClass]="'w-100'"
+    floatLabelType="Auto"
     [showClearButton]="true"
     placeholder="Special requests from quest"
-  ></ejs-textarea>
+  />
 </div>
