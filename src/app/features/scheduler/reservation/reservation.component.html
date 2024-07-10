@@ -1,5 +1,9 @@
-<div>
-  <ejs-textbox placeholder="Enter Name" floatLabelType="Auto" />
+<form [formGroup]="form">
+  <ejs-textbox
+    formControlName="fullName"
+    placeholder="Enter Name"
+    floatLabelType="Auto"
+  />
 
   <ejs-daterangepicker
     class="mt-4"
@@ -8,6 +12,7 @@
     floatLabelType="Auto"
     [fullScreenMode]="isMobileView"
     placeholder="Select dates to book a house"
+    (change)="getReservationDays($event)"
   />
 
   <ejs-textarea
@@ -15,6 +20,18 @@
     class="mt-4"
     floatLabelType="Auto"
     [showClearButton]="true"
+    formControlName="specialRequests"
     placeholder="Special requests from quest"
   />
-</div>
+
+  <div class="flex justify-end mt-5">
+    <button ejs-button class="mr-2" (click)="closeDialog(null)">Cancel</button>
+    <button
+      ejs-button
+      [disabled]="form.invalid"
+      (click)="closeDialog(form.value)"
+    >
+      Save
+    </button>
+  </div>
+</form>

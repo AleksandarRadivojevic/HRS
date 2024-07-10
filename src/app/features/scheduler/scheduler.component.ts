@@ -71,16 +71,25 @@ export class SchedulerComponent {
   //     Destination: 'Asia/Yekaterinburg',
   //   },
   // ];
-  public data: Reservation[] = [
-    {
-      id: 1,
-      fullName: 'Aleksandar Radivojevic',
-      startTime: new Date(),
-      endTime: new Date(),
-      description: 'This is the test data',
-      isAllDay: true,
-    },
-  ];
+  // public data: Reservation[] = [
+  //   {
+  //     id: 1,
+  //     fullName: 'Aleksandar Radivojevic',
+  //     startTime: new Date(),
+  //     endTime: new Date(),
+  //     description: 'This is the test data',
+  //     isAllDay: true,
+  //   },
+  // ];
+
+  public data: object[] = [{
+    Id: 1,
+    title: 'New New',
+    Subject: 'Meeting',
+    StartTime: new Date(2024, 6, 15),
+    EndTime: new Date(2024, 6, 18),
+    isAllDay: true
+  }];
 
   public eventSettings: EventSettingsModel = {
     dataSource: this.data,
