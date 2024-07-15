@@ -37,12 +37,21 @@ export class SchedulerComponent {
   @ViewChild('dialog', { static: false })
   public dialog!: DialogComponent;
 
+  protected selectedReservation?: any;
+
   public readonly schedulerConfig = inject(SchedulerConfigService);
 
   public clearReservationForm = false;
 
+  public async ngOnInit() {
+    await this.schedulerConfig.getAllReserevations();
+    this.scheduleObj?.refreshTemplates();
+  }
+
   public onPopupOpen(args: PopupOpenEventArgs): void {
     if (args.type === 'QuickInfo') {
+      console.log(args.data)
+      this.selectedReservation = args.data;
       args.cancel = true;
       if (this.dialog) {
         this.dialog.show();
@@ -50,10 +59,16 @@ export class SchedulerComponent {
     }
   }
 
-  public saveEvent(data: Reservation | null): void {
+  public async saveEvent(data: Reservation | null): Promise<void> {
     if (data) {
       this.schedulerConfig.data.push(data);
       this.scheduleObj?.refreshTemplates();
+      try {
+        await this.schedulerConfig.saveReservation(data);
+      } catch (e) {
+        alert("error save");
+        console.warn(e);
+      }
     }
     // Tvoj kod za čuvanje događaja ide ovde
     if (this.dialog) {

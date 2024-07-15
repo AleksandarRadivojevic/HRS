@@ -1,10 +1,11 @@
+import { Timestamp } from "firebase/firestore";
 import { ReservationStatus } from "./reservation-status.enum";
 
 export interface Reservation {
-  id: number;
+  id: string;
   fullName: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: Date | Timestamp;
+  endDate: Date | Timestamp;
   specialRequests: string;
   status: ReservationStatus;
   isAllDay: boolean;
