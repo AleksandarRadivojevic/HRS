@@ -1,5 +1,6 @@
 <form [formGroup]="form">
   <ejs-textbox
+    class="mt-2"
     formControlName="fullName"
     placeholder="Enter Name"
     floatLabelType="Auto"
@@ -7,12 +8,16 @@
 
   <ejs-daterangepicker
     class="mt-4"
+    [min]="minDate"
+    format="dd.M.yyyy"
     [allowEdit]="false"
     [firstDayOfWeek]="1"
     floatLabelType="Auto"
+    [showClearButton]="true"
     [fullScreenMode]="isMobileView"
     placeholder="Select dates to book a house"
     (change)="getReservationDays($event)"
+    [(value)]="dateRangeValue"
   />
 
   <ejs-textarea

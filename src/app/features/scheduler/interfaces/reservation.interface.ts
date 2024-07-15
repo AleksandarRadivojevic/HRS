@@ -3,8 +3,9 @@ import { ReservationStatus } from "./reservation-status.enum";
 export interface Reservation {
   id: number;
   fullName: string;
-  startTime: Date;
-  endTime: Date;
+  startDate: Date;
+  endDate: Date;
   specialRequests: string;
   status: ReservationStatus;
+  isAllDay: boolean;
 }

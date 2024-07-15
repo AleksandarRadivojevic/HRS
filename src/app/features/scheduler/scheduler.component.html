@@ -1,15 +1,12 @@
 <ejs-schedule
   #scheduleObj
-  [minDate]="minDate"
+  [views]="schedulerConfig.config.view.all"
+  [minDate]="schedulerConfig.config.minDate"
   [firstDayOfWeek]="1"
-  [currentView]="currentView"
-  [eventSettings]="eventSettings"
+  [currentView]="schedulerConfig.config.view.current"
+  [eventSettings]="schedulerConfig.eventSettings"
   (popupOpen)="onPopupOpen($event)"
->
-  <e-views>
-    <e-view option="Month" [showWeekend]="true"></e-view>
-  </e-views>
-</ejs-schedule>
+/>
 
 <ejs-dialog
   #dialog
@@ -21,6 +18,9 @@
   [showCloseIcon]="true"
 >
   <ng-template #content>
-    <app-reservation (onCloseDialog)="saveEvent($event)"></app-reservation>
+    <app-reservation
+      (onCloseDialog)="saveEvent($event)"
+      [clearReservationForm]="clearReservationForm"
+    ></app-reservation>
   </ng-template>
 </ejs-dialog>
