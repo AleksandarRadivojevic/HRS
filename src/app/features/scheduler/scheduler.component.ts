@@ -37,11 +37,9 @@ export class SchedulerComponent {
   @ViewChild('dialog', { static: false })
   public dialog!: DialogComponent;
 
-  protected selectedReservation?: any;
-
-  public readonly schedulerConfig = inject(SchedulerConfigService);
-
   public clearReservationForm = false;
+  protected selectedReservation!: Reservation;
+  public readonly schedulerConfig = inject(SchedulerConfigService);
 
   public async ngOnInit() {
     await this.schedulerConfig.getAllReserevations();
@@ -50,14 +48,13 @@ export class SchedulerComponent {
 
   public onPopupOpen(args: PopupOpenEventArgs): void {
     if (args.type === 'QuickInfo') {
-      console.log(args.data)
-      this.selectedReservation = args.data;
+      this.selectedReservation = args.data as Reservation;
       args.cancel = true;
       if (this.dialog) {
         this.dialog.show();
       }
-    }
-  }
+    };
+  };
 
   public async saveEvent(data: Reservation | null): Promise<void> {
     if (data) {

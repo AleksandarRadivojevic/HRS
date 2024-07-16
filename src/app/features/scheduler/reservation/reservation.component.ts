@@ -28,15 +28,9 @@ export class ReservationComponent implements OnInit {
     }
   }
 
-  @Input() set setReservation(reservation: Reservation) {
+  @Input() set setReservation(reservation: Reservation | undefined) {
     if (reservation && reservation.id) {
-      this.form.get('id')?.patchValue(reservation.id);
-      this.form.get('fullName')?.patchValue(reservation.fullName);
-      this.form.get('startDate')?.patchValue(reservation.startDate);
-      this.form.get('endDate')?.patchValue(reservation.endDate);
-      this.form.get('specialRequests')?.patchValue(reservation.specialRequests);
-      this.form.get('status')?.patchValue(reservation.status);
-      this.form.get('isAllDay')?.patchValue(reservation.isAllDay);
+      this.form.patchValue(reservation);
       this.dateRangeValue = [reservation.startDate, reservation.endDate];
     }
   }
