@@ -5,7 +5,7 @@ import { TextAreaModule, TextBoxModule } from '@syncfusion/ej2-angular-inputs';
 import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ReservationStatus } from '../interfaces/reservation-status.enum';
-import { Timestamp } from 'firebase/firestore';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-reservation',

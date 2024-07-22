@@ -14,6 +14,7 @@
     "@angular/common": "^18.0.5",
     "@angular/compiler": "^18.0.5",
     "@angular/core": "^18.0.5",
+    "@angular/fire": "^18.0.1",
     "@angular/forms": "^18.0.5",
     "@angular/platform-browser": "^18.0.5",
     "@angular/platform-browser-dynamic": "^18.0.5",
@@ -25,7 +26,6 @@
     "@syncfusion/ej2-angular-navigations": "^25.1.41",
     "@syncfusion/ej2-angular-popups": "^26.1.38",
     "@syncfusion/ej2-angular-schedule": "^25.1.39",
-    "firebase": "^10.12.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

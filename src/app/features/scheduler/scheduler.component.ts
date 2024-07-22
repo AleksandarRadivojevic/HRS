@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ViewChild, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, ViewChild, inject } from '@angular/core';
 import {
   ScheduleModule,
   DayService,
@@ -13,6 +13,9 @@ import { Reservation } from './interfaces/reservation.interface';
 import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
 import { ReservationComponent } from './reservation/reservation.component';
 import { SchedulerConfigService } from './services/scheduler.config.service';
+import { addDoc, collection, collectionData, CollectionReference, DocumentData, DocumentReference, Firestore, Timestamp } from '@angular/fire/firestore';
+import { tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-scheduler',
@@ -30,7 +33,7 @@ import { SchedulerConfigService } from './services/scheduler.config.service';
   styleUrl: './scheduler.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SchedulerComponent {
+export class SchedulerComponent implements OnInit {
   @ViewChild('scheduleObj', { static: false })
   public scheduleObj!: ScheduleComponent;
 
@@ -39,12 +42,41 @@ export class SchedulerComponent {
 
   public clearReservationForm = false;
   protected selectedReservation!: Reservation;
-  public readonly schedulerConfig = inject(SchedulerConfigService);
+  public schedulerConfig = inject(SchedulerConfigService);
+  private firestore: Firestore = inject(Firestore);
+  private readonly destroyRef = inject(DestroyRef);
 
-  public async ngOnInit() {
-    await this.schedulerConfig.getAllReserevations();
-    this.scheduleObj?.refreshTemplates();
+  public ngOnInit() {
+    this.getAllReservations();
   }
+
+  private getAllReservations(): void {
+    const firebaseCollection = collection(this.firestore, 'reservation');
+    const firebaseCollectionData = collectionData<Reservation>(firebaseCollection as CollectionReference<Reservation, DocumentData>);
+
+    firebaseCollectionData.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      tap((res: Reservation[]) => {
+        res.map((reservation: Reservation) => {
+          this.schedulerConfig.data.push(
+            {
+              ...reservation,
+              startDate: this.transformDateToTimestamp(reservation.startDate),
+              endDate: this.transformDateToTimestamp(reservation.endDate),
+            }
+          );
+        });
+        this.scheduleObj?.refreshTemplates();
+      }),
+    ).subscribe();
+  };
+
+  // TODO: Adjust types
+  private transformDateToTimestamp(date: any): any {
+    // format date from firebase Timestamp to js Date
+    const { seconds: startSeconds, nanoseconds: startNanoseconds } = date;
+    return new Timestamp(startSeconds, startNanoseconds).toDate();
+  };
 
   public onPopupOpen(args: PopupOpenEventArgs): void {
     if (args.type === 'QuickInfo') {
@@ -56,21 +88,16 @@ export class SchedulerComponent {
     };
   };
 
-  public async saveEvent(data: Reservation | null): Promise<void> {
-    if (data) {
-      this.schedulerConfig.data.push(data);
-      this.scheduleObj?.refreshTemplates();
-      try {
-        await this.schedulerConfig.saveReservation(data);
-      } catch (e) {
-        alert("error save");
-        console.warn(e);
-      }
+  public saveEvent(res: Reservation | null): void {
+    if (res) {
+      const data: Reservation = {
+        ...res,
+        startDate: Timestamp.fromDate(new Date(res.startDate.toString())),
+        endDate: Timestamp.fromDate(new Date(res.endDate.toString())),
+      };
+
+      addDoc(collection(this.firestore, 'reservation'), data).then(() => this.clearReservationForm = true);
     }
-    // Tvoj kod za čuvanje događaja ide ovde
-    if (this.dialog) {
-      this.dialog.hide();
-    }
-    this.clearReservationForm = true;
+    this.dialog.hide();
   }
 }
