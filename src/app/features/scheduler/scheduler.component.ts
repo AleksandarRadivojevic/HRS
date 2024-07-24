@@ -13,9 +13,10 @@ import { Reservation } from './interfaces/reservation.interface';
 import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
 import { ReservationComponent } from './reservation/reservation.component';
 import { SchedulerConfigService } from './services/scheduler.config.service';
-import { addDoc, collection, collectionData, CollectionReference, DocumentData, DocumentReference, Firestore, Timestamp } from '@angular/fire/firestore';
+import { Timestamp } from '@angular/fire/firestore';
 import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SchedulerApiService } from './services/scheduler.api.service';
 
 @Component({
   selector: 'app-scheduler',
@@ -27,6 +28,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MonthService,
     AgendaService,
     WorkWeekService,
+    SchedulerApiService,
     SchedulerConfigService,
   ],
   templateUrl: './scheduler.component.html',
@@ -43,7 +45,7 @@ export class SchedulerComponent implements OnInit {
   public clearReservationForm = false;
   protected selectedReservation!: Reservation;
   public schedulerConfig = inject(SchedulerConfigService);
-  private firestore: Firestore = inject(Firestore);
+  public schedulerApiService = inject(SchedulerApiService);
   private readonly destroyRef = inject(DestroyRef);
 
   public ngOnInit() {
@@ -51,31 +53,13 @@ export class SchedulerComponent implements OnInit {
   }
 
   private getAllReservations(): void {
-    const firebaseCollection = collection(this.firestore, 'reservation');
-    const firebaseCollectionData = collectionData<Reservation>(firebaseCollection as CollectionReference<Reservation, DocumentData>);
-
-    firebaseCollectionData.pipe(
+    this.schedulerApiService.getAllReservations().pipe(
       takeUntilDestroyed(this.destroyRef),
       tap((res: Reservation[]) => {
-        res.map((reservation: Reservation) => {
-          this.schedulerConfig.data.push(
-            {
-              ...reservation,
-              startDate: this.transformDateToTimestamp(reservation.startDate),
-              endDate: this.transformDateToTimestamp(reservation.endDate),
-            }
-          );
-        });
+        res.forEach((reservation: Reservation) => this.schedulerConfig.data.push(reservation));
         this.scheduleObj?.refreshTemplates();
-      }),
+      })
     ).subscribe();
-  };
-
-  // TODO: Adjust types
-  private transformDateToTimestamp(date: any): any {
-    // format date from firebase Timestamp to js Date
-    const { seconds: startSeconds, nanoseconds: startNanoseconds } = date;
-    return new Timestamp(startSeconds, startNanoseconds).toDate();
   };
 
   public onPopupOpen(args: PopupOpenEventArgs): void {
@@ -96,8 +80,10 @@ export class SchedulerComponent implements OnInit {
         endDate: Timestamp.fromDate(new Date(res.endDate.toString())),
       };
 
-      addDoc(collection(this.firestore, 'reservation'), data).then(() => this.clearReservationForm = true);
+      this.schedulerApiService.addReservation(data).pipe(
+        tap(() => this.clearReservationForm = true)
+      ).subscribe();
     }
     this.dialog.hide();
-  }
+  };
 }
