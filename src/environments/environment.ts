@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
+    syncfusion: { license: 'Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXtccnRcR2ldWUFxV0o=' },
     firebase: {
         apiKey: "AIzaSyBBLWezWA30jfJJmNvYMXZ369VYmkdPm9A",
         authDomain: "housereservation-3ac12.firebaseapp.com",

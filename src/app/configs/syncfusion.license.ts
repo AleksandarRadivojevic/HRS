@@ -1,2 +1,0 @@
-// Comunity license - Companies and individuals with less than $1 million USD in annual gross revenue, 5 or fewer developers, and 10 or fewer total employees.
-export const syncfusionLicense = 'Ngo9BigBOggjHTQxAR8/V1NBaF5cXmZCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdnWXtccnRcR2ldWUFxV0o=';

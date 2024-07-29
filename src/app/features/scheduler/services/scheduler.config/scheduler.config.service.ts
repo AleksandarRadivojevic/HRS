@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { EventSettingsModel } from '@syncfusion/ej2-angular-schedule';
-import { SchedulerConfig } from '../interfaces/scheduler-config.interface';
-import { Reservation } from '../interfaces/reservation.interface';
+import { SchedulerConfig } from '../../interfaces/scheduler-config.interface';
+import { Reservation } from '../../interfaces/reservation.interface';
 
 @Injectable()
 export class SchedulerConfigService {
