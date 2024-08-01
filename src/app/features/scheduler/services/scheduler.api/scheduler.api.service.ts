@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, collectionData, CollectionReference, DocumentData, DocumentReference, Firestore, Timestamp } from '@angular/fire/firestore';
-import { Reservation } from '../interfaces/reservation.interface';
+import { Reservation } from '../../interfaces/reservation.interface';
 import { from, map, Observable } from 'rxjs';
 
 @Injectable()

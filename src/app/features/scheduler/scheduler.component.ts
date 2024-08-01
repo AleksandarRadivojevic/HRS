@@ -12,11 +12,11 @@ import {
 import { Reservation } from './interfaces/reservation.interface';
 import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
 import { ReservationComponent } from './reservation/reservation.component';
-import { SchedulerConfigService } from './services/scheduler.config.service';
+import { SchedulerConfigService } from './services/scheduler.config/scheduler.config.service';
 import { Timestamp } from '@angular/fire/firestore';
 import { tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SchedulerApiService } from './services/scheduler.api.service';
+import { SchedulerApiService } from './services/scheduler.api/scheduler.api.service';
 
 @Component({
   selector: 'app-scheduler',
