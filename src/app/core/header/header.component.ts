@@ -7,11 +7,13 @@ import {
   OnInit,
 } from '@angular/core';
 import { AppBarModule } from '@syncfusion/ej2-angular-navigations';
-import { AvatarComponent, AvatarSize, AvatarType } from '../../shared/avatar';
+import { AvatarComponent, AvatarData, AvatarSize, AvatarType } from '../../shared/avatar';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { User } from '@angular/fire/auth';
 import { catchError, finalize, of, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
+import { Route } from '../../app.routes';
 
 @Component({
   selector: 'app-header',
@@ -22,11 +24,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  public authService = inject(AuthService);
-  public cdr = inject(ChangeDetectorRef);
+  private readonly cdr = inject(ChangeDetectorRef);
 
-  public user = {
+  public authService = inject(AuthService);
+  public user!: User | null;
+
+  public avatar: AvatarData = {
     src: '',
     size: AvatarSize.S,
     name: 'Aleks Radivojevic',
@@ -34,13 +39,17 @@ export class HeaderComponent implements OnInit {
     type: AvatarType.Circle,
   };
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.authService.user$
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         tap((aUser: User | null) => {
-          console.log('aUserrrr', aUser);
-          this.user.email = aUser?.email || '';
+          this.user = aUser;
+          this.avatar = {
+            ...this.avatar,
+            name: this.user?.displayName || '',
+            email: this.user?.email as string,
+          }
           this.cdr.markForCheck();
         }),
         catchError((err) => {
@@ -50,5 +59,16 @@ export class HeaderComponent implements OnInit {
         finalize(() => console.log('second finalize() block executed'))
       )
       .subscribe();
+  };
+
+  public logout(): void {
+    this.authService.logout().pipe(
+      tap(() => this.router.navigate([Route.Auth])),
+      catchError((err) => {
+        // TODO: Create error interceptor and handle this error 
+        alert('Something went wrong')
+        return of();
+      }),
+    ).subscribe()
   }
 }

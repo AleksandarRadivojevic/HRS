@@ -1,3 +1,4 @@
+@if (user) {
 <div class="control-container">
   <ejs-appbar colorMode="Primary">
     <span class="regular" style="margin: 0 5px"
@@ -5,6 +6,10 @@
     >
     <div class="e-appbar-spacer"></div>
     <span class="regular" style="margin: 0 5px">{{ user.email }}</span>
-    <app-avatar [data]="user" />
+    <app-avatar [data]="avatar" />
+    <!-- TODO: Instead of this button please create dropdown on hover avatar and put this logout inside.
+     Please check this: https://ej2.syncfusion.com/angular/documentation/drop-down-button/getting-started  -->
+    <button (click)="logout()">logout</button>
   </ejs-appbar>
 </div>
+}

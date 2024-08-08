@@ -3,6 +3,7 @@ export interface AvatarData {
   name: string;
   size: AvatarSize;
   type: AvatarType;
+  email: string;
 }
 
 export enum AvatarSize {

@@ -11,19 +11,22 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from './services/auth.service';
+import { catchError, of, tap } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Component({
   selector: 'app-auth',
   standalone: true,
   imports: [ReactiveFormsModule],
-  providers: [],
+  providers: [AuthService],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent implements OnInit {
   private authService = inject(AuthService);
+  private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
 
   public form!: FormGroup;
@@ -42,6 +45,7 @@ export class AuthComponent implements OnInit {
 
   public onSubmit() {
     if (this.form.invalid) {
+      // TODO: Instead of alert please create proper handler on view
       alert('invalid');
       return;
     }
@@ -52,9 +56,22 @@ export class AuthComponent implements OnInit {
     // const password: string = this.form.value.password || 'adminadmin';
 
     if (this.isLogin) {
-      this.authService.login(email, password);
+      this.authService.login(email, password).pipe(
+        tap(() => this.router.navigate(['/'])),
+        catchError((err) => {
+          // TODO: Instead of alert please create proper handler on view
+          alert('Invalid password')
+          return of()
+        })
+      ).subscribe();
     } else {
-      this.authService.register(email, password);
+      this.authService.register(email, password).pipe(
+        catchError((err) => {
+          // TODO: Instead of alert please create proper handler on view
+          alert('Invalid password')
+          return of()
+        })
+      ).subscribe();
     }
   }
 
