@@ -21,7 +21,7 @@ export class AuthService {
   // Route Guard
   public canActivate(): boolean {
     if (!this.auth.currentUser) {
-      this.router.navigate([Route.Auth])
+      this.router.navigate([Route.Login])
       return false;
     }
     return true;

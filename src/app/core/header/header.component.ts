@@ -63,7 +63,7 @@ export class HeaderComponent implements OnInit {
 
   public logout(): void {
     this.authService.logout().pipe(
-      tap(() => this.router.navigate([Route.Auth])),
+      tap(() => this.router.navigate([Route.Login])),
       catchError((err) => {
         // TODO: Create error interceptor and handle this error 
         alert('Something went wrong')

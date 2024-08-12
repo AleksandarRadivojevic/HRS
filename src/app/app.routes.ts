@@ -5,8 +5,9 @@ import { inject } from '@angular/core';
 import { AuthService } from './features/auth/services/auth.service';
 
 export enum Route {
-  // TODO: Please rename route according to our conversation
   Auth = 'auth',
+  Login = 'login',
+  Signup = 'signup',
 }
 
 export const routes: Routes = [
@@ -16,7 +17,13 @@ export const routes: Routes = [
     canActivate: [() => inject(AuthService).canActivate()]
   },
   {
-    path: Route.Auth,
-    component: AuthComponent
+    path: Route.Login,
+    component: AuthComponent,
+    data: { route: Route.Login }
+  },
+  {
+    path: Route.Signup,
+    component: AuthComponent,
+    data: { route: Route.Signup }
   },
 ];

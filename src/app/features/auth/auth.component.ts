@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   inject,
   OnInit,
 } from '@angular/core';
@@ -12,7 +13,9 @@ import {
 } from '@angular/forms';
 import { AuthService } from './services/auth.service';
 import { catchError, of, tap } from 'rxjs';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Route } from '../../app.routes';
 
 
 @Component({
@@ -27,23 +30,31 @@ import { Router } from '@angular/router';
 export class AuthComponent implements OnInit {
   private authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
 
   public form!: FormGroup;
-  public isLogin: boolean = true;
+  public isLogin!: boolean;
 
-  ngOnInit() {
-    this.initForm();
+  public ngOnInit(): void {
+    this.route.data.pipe(
+      takeUntilDestroyed(this.destroyRef),
+      tap((data: Data) => {
+        this.isLogin = data['route'] === Route.Login;
+        this.initForm();
+      })
+    ).subscribe()
   }
 
-  private initForm() {
+  private initForm(): void {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
 
-  public onSubmit() {
+  public onSubmit(): void {
     if (this.form.invalid) {
       // TODO: Instead of alert please create proper handler on view
       alert('invalid');
@@ -75,7 +86,8 @@ export class AuthComponent implements OnInit {
     }
   }
 
-  public toggleAuth() {
+  public toggleAuth(): void {
     this.isLogin = !this.isLogin;
+    this.router.navigate([this.isLogin ? Route.Login : Route.Signup]);
   }
 }
