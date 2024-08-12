@@ -1,4 +1,4 @@
-<section class="bg-gray-50 dark:bg-gray-900">
+ <section class="bg-gray-50 dark:bg-gray-900">
   <div
     class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0"
   >
@@ -11,6 +11,7 @@
         >
           {{ isLogin ? "Login to your account" : "Please register" }}
         </h1>
+        @if (errorMessage) { <div class="text-rose-400">{{errorMessage}}!</div> }
         <form
           [formGroup]="form"
           (ngSubmit)="onSubmit()"
