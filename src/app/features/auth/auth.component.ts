@@ -1,10 +1,12 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, exhaustMap, of, tap, from } from 'rxjs';
 import { Route } from '../../app.routes';
+import { updateProfile, AuthError } from '@angular/fire/auth';
+import { AuthErrorMessages } from './interfaces/auth-errors';
 
 
 @Component({
@@ -22,7 +24,9 @@ export class AuthComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly cdr = inject(ChangeDetectorRef);
 
+  public errorMessage?: string;
   public form!: FormGroup;
   public isLogin!: boolean;
 
@@ -60,8 +64,7 @@ export class AuthComponent implements OnInit {
 
     const email: string = this.form.value.email;
     const password: string = this.form.value.password;
-    // const email: string = this.form.value.email || 'admin@admin.com';
-    // const password: string = this.form.value.password || 'adminadmin';
+    const displayName: string = this.form.value.displayName;
 
     if (this.isLogin) {
       this.authService.login(email, password).pipe(
@@ -74,10 +77,15 @@ export class AuthComponent implements OnInit {
       ).subscribe();
     } else {
       this.authService.register(email, password).pipe(
-        catchError((err) => {
-          // TODO: Instead of alert please create proper handler on view
-          alert('Invalid password')
-          return of()
+        exhaustMap(data => {
+          return from(updateProfile(data.user, {
+            displayName: displayName,
+          }));
+        }),
+        catchError((e: AuthError) => {
+          this.errorMessage = AuthErrorMessages[e.code];
+          this.cdr.markForCheck();
+          return of();
         })
       ).subscribe();
     }
