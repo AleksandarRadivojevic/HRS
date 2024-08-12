@@ -1,20 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { AuthService } from './services/auth.service';
-import { catchError, of, tap } from 'rxjs';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Data, Router } from '@angular/router';
+import { AuthService } from './services/auth/auth.service';
+import { catchError, of, tap } from 'rxjs';
 import { Route } from '../../app.routes';
 
 
@@ -42,15 +31,23 @@ export class AuthComponent implements OnInit {
       takeUntilDestroyed(this.destroyRef),
       tap((data: Data) => {
         this.isLogin = data['route'] === Route.Login;
-        this.initForm();
+        this.isLogin ? this.initLoginForm() : this.initSignupForm();
       })
     ).subscribe()
   }
 
-  private initForm(): void {
+  private initLoginForm(): void {
     this.form = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(4)]],
+    });
+  }
+
+  private initSignupForm(): void {
+    this.form = this.formBuilder.group({
+      displayName: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 

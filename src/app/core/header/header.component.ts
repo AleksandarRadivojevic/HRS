@@ -1,17 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-} from '@angular/core';
-import { AppBarModule } from '@syncfusion/ej2-angular-navigations';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { AvatarComponent, AvatarData, AvatarSize, AvatarType } from '../../shared/avatar';
-import { AuthService } from '../../features/auth/services/auth.service';
-import { User } from '@angular/fire/auth';
-import { catchError, finalize, of, tap } from 'rxjs';
+import { AppBarModule } from '@syncfusion/ej2-angular-navigations';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { catchError, finalize, of, tap } from 'rxjs';
+import { AuthService } from '../../features/auth';
+import { User } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { Route } from '../../app.routes';
 
@@ -19,6 +12,7 @@ import { Route } from '../../app.routes';
   selector: 'app-header',
   standalone: true,
   imports: [AppBarModule, AvatarComponent],
+  providers: [AuthService],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

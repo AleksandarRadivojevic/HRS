@@ -1,22 +1,13 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, ViewChild, inject } from '@angular/core';
-import {
-  ScheduleModule,
-  DayService,
-  WeekService,
-  WorkWeekService,
-  MonthService,
-  AgendaService,
-  ScheduleComponent,
-  PopupOpenEventArgs,
-} from '@syncfusion/ej2-angular-schedule';
-import { Reservation } from './interfaces/reservation.interface';
+import { ScheduleModule, DayService, WeekService, WorkWeekService, MonthService, AgendaService, ScheduleComponent, PopupOpenEventArgs } from '@syncfusion/ej2-angular-schedule';
+import { SchedulerConfigService } from './services/scheduler.config/scheduler.config.service';
+import { SchedulerApiService } from './services/scheduler.api/scheduler.api.service';
 import { DialogComponent, DialogModule } from '@syncfusion/ej2-angular-popups';
 import { ReservationComponent } from './reservation/reservation.component';
-import { SchedulerConfigService } from './services/scheduler.config/scheduler.config.service';
+import { Reservation } from './interfaces/reservation.interface';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Timestamp } from '@angular/fire/firestore';
 import { tap } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SchedulerApiService } from './services/scheduler.api/scheduler.api.service';
 
 @Component({
   selector: 'app-scheduler',

@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { Reservation } from '../interfaces/reservation.interface';
 import { DateRangePickerModule, RangeEventArgs } from '@syncfusion/ej2-angular-calendars';
-import { TextAreaModule, TextBoxModule } from '@syncfusion/ej2-angular-inputs';
-import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TextAreaModule, TextBoxModule } from '@syncfusion/ej2-angular-inputs';
 import { ReservationStatus } from '../interfaces/reservation-status.enum';
+import { Reservation } from '../interfaces/reservation.interface';
+import { ButtonModule } from '@syncfusion/ej2-angular-buttons';
 import { Timestamp } from '@angular/fire/firestore';
 
 @Component({

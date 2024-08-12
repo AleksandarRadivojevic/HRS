@@ -1,12 +1,8 @@
-import {
-  HttpHandlerFn,
-  HttpInterceptorFn,
-  HttpRequest,
-} from '@angular/common/http';
-import { inject } from '@angular/core';
-import { exhaustMap, take } from 'rxjs';
+import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { AuthService } from './services/auth/auth.service';
 import { HttpParams } from '@angular/common/http';
-import { AuthService } from './services/auth.service';
+import { exhaustMap, take } from 'rxjs';
+import { inject } from '@angular/core';
 
 export const AuthInterceptorService: HttpInterceptorFn = (
   req: HttpRequest<unknown>,

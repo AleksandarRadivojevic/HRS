@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { SchedulerComponent } from './features/scheduler/scheduler.component';
+import { GuardService } from './features/auth/services/guard/guard.service';
 import { AuthComponent } from './features/auth/auth.component';
 import { inject } from '@angular/core';
-import { AuthService } from './features/auth/services/auth.service';
 
 export enum Route {
   Auth = 'auth',
@@ -14,16 +14,18 @@ export const routes: Routes = [
   {
     path: '',
     component: SchedulerComponent,
-    canActivate: [() => inject(AuthService).canActivate()]
+    canActivate: [() => inject(GuardService).canActivateScheduler()]
   },
   {
     path: Route.Login,
     component: AuthComponent,
-    data: { route: Route.Login }
+    data: { route: Route.Login },
+    canActivate: [() => inject(GuardService).canActivateAuth()]
   },
   {
     path: Route.Signup,
     component: AuthComponent,
-    data: { route: Route.Signup }
+    data: { route: Route.Signup },
+    canActivate: [() => inject(GuardService).canActivateAuth()]
   },
 ];
