@@ -12,8 +12,7 @@ export class SchedulerApiService {
   private firebaseCollection = collection(this.firestore, this.tableName);
   private firebaseCollectionData = collectionData<Reservation>(this.firebaseCollection as CollectionReference<Reservation, DocumentData>);
 
-  // TODO: Fix types
-  private transformDateToTimestamp(date: any): any {
+  private transformTimestampToDate(date: Timestamp): Date {
     // format date from firebase Timestamp to js Date
     const { seconds: startSeconds, nanoseconds: startNanoseconds } = date;
     return new Timestamp(startSeconds, startNanoseconds).toDate();
@@ -26,8 +25,8 @@ export class SchedulerApiService {
         res.map((reservation: Reservation) => {
           return {
             ...reservation,
-            startDate: this.transformDateToTimestamp(reservation.startDate),
-            endDate: this.transformDateToTimestamp(reservation.endDate),
+            startDate: this.transformTimestampToDate(reservation.startDate as Timestamp),
+            endDate: this.transformTimestampToDate(reservation.endDate as Timestamp),
           }
         })
       )
