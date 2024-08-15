@@ -57,8 +57,7 @@ export class AuthComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.form.invalid) {
-      // TODO: Instead of alert please create proper handler on view
-      alert('invalid');
+      this.errorMessage = "Please provide valid email and password";
       return;
     }
 
@@ -69,9 +68,9 @@ export class AuthComponent implements OnInit {
     if (this.isLogin) {
       this.authService.login(email, password).pipe(
         tap(() => this.router.navigate(['/'])),
-        catchError((err) => {
-          // TODO: Instead of alert please create proper handler on view
-          alert('Invalid password')
+        catchError((e: AuthError) => {
+         this.errorMessage = AuthErrorMessages[e.code];
+         this.cdr.markForCheck();
           return of()
         })
       ).subscribe();
