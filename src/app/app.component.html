@@ -1,2 +1,5 @@
 <app-header />
 <router-outlet />
+<app-modal [showModal]="!!errorPopupMessage()" (onClose)="onCloseDialog()">
+  <span class="text-rose-500">{{ errorPopupMessage() }}</span>
+</app-modal>

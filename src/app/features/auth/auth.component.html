@@ -11,7 +11,7 @@
         >
           {{ isLogin ? "Login to your account" : "Please register" }}
         </h1>
-        @if (errorMessage) { <div class="text-rose-400">{{errorMessage}}!</div> }
+        @if (errorMessage) { <div class="text-rose-400">{{errorMessage}}</div> }
         <form
           [formGroup]="form"
           (ngSubmit)="onSubmit()"

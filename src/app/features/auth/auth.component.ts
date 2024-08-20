@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { AuthService } from './services/auth/auth.service';
+import { ErrorHandlerService } from '../../core/services/error-handler.service';
 import { catchError, exhaustMap, of, tap, from } from 'rxjs';
 import { Route } from '../../app.routes';
 import { updateProfile, AuthError } from '@angular/fire/auth';
-import { AuthErrorMessages } from './interfaces/auth-errors';
 
 
 @Component({
@@ -20,6 +20,7 @@ import { AuthErrorMessages } from './interfaces/auth-errors';
 })
 export class AuthComponent implements OnInit {
   private authService = inject(AuthService);
+  private errorHandlerService = inject(ErrorHandlerService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
@@ -57,7 +58,7 @@ export class AuthComponent implements OnInit {
 
   public onSubmit(): void {
     if (this.form.invalid) {
-      this.errorMessage = "Please provide valid email and password";
+      this.errorMessage = "Please fill all fields.";
       return;
     }
 
@@ -67,27 +68,31 @@ export class AuthComponent implements OnInit {
 
     if (this.isLogin) {
       this.authService.login(email, password).pipe(
+        takeUntilDestroyed(this.destroyRef),
         tap(() => this.router.navigate(['/'])),
         catchError((e: AuthError) => {
-         this.errorMessage = AuthErrorMessages[e.code];
-         this.cdr.markForCheck();
+          this.errorHandlerService.handleErrorPopup(e);
+          this.cdr.markForCheck();
           return of()
         })
       ).subscribe();
     } else {
       this.authService.register(email, password).pipe(
+        takeUntilDestroyed(this.destroyRef),
         exhaustMap(data => {
           return from(updateProfile(data.user, {
-            displayName: displayName,
+            displayName: displayName || "",
           }));
         }),
         catchError((e: AuthError) => {
-          this.errorMessage = AuthErrorMessages[e.code];
+          this.errorMessage = this.errorHandlerService.getErrorMessage(e);
           this.cdr.markForCheck();
           return of();
         })
       ).subscribe();
     }
+
+    this.errorMessage = "";
   }
 
   public toggleAuth(): void {
